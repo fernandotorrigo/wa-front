@@ -1,0 +1,11 @@
+{
+  "project": "wa_front",
+  "repository": "frontend",
+  "endpointDev": "http://localhost:3001",
+  "endpointProd": "",
+  "dockerImage": "waproject/wa-front",
+  "dockerCredentials": "",
+  "sentryDsn": "",
+  "confirmed": true,
+  "slug": "wa-front"
+}
