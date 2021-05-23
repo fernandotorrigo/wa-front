@@ -7,14 +7,12 @@ import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Slide from '@material-ui/core/Slide';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import ErrorMessage from 'components/Shared/ErrorMessage';
 import TextField from 'components/Shared/Fields/Text';
 import Toast from 'components/Shared/Toast';
 import { logError } from 'helpers/rxjs-operators/logError';
 import { useFormikObservable } from 'hooks/useFormikObservable';
 import IOrder from 'interfaces/models/order';
 import React, { forwardRef, Fragment, memo, useCallback } from 'react';
-import { useRetryableObservable } from 'react-use-observable';
 import { tap } from 'rxjs/operators';
 import orderService from 'services/order';
 import * as yup from 'yup';
@@ -27,9 +25,9 @@ interface IProps {
 }
 
 const validationSchema = yup.object().shape({
-  description: yup.string().required().min(3).max(50),
   value: yup.string().required().min(1).max(50),
-  quantity: yup.string().required().min(1).max(50)
+  quantity: yup.string().required().min(1).max(50),
+  description: yup.string().required().min(3).max(150)
 });
 
 const useStyle = makeStyles({
@@ -46,22 +44,20 @@ const useStyle = makeStyles({
 const FormDialog = memo((props: IProps) => {
   const classes = useStyle(props);
 
-  const formik = useFormikObservable<IOrder>({
+  const formik = useFormikObservable({
+    initialValues: { value: '', quantity: '', description: '' },
     validationSchema,
     onSubmit(model) {
+      console.log('dasdas');
       return orderService.save(model).pipe(
         tap(order => {
-          Toast.show(`${order.description} foi salvo${model.id ? '' : ', um email foi enviado com a senha'}`);
+          Toast.show(`O pedido foi salvo com sucesso`);
           props.onComplete(order);
         }),
         logError(true)
       );
     }
   });
-
-  const [roles, rolesError, , retryRoles] = useRetryableObservable(() => {
-    return orderService.roles().pipe(logError());
-  }, []);
 
   const handleEnter = useCallback(() => {
     formik.setValues(props.order ?? formik.initialValues, false);
@@ -83,29 +79,24 @@ const FormDialog = memo((props: IProps) => {
       {formik.isSubmitting && <LinearProgress color='primary' />}
 
       <form onSubmit={formik.handleSubmit}>
-        <DialogTitle>{formik.values.id ? 'Editar' : 'Novo'} Pedido</DialogTitle>
+        <DialogTitle>Novo pedido</DialogTitle>
         <DialogContent className={classes.content}>
-          {rolesError && <ErrorMessage error={rolesError} tryAgain={retryRoles} />}
-
-          {!rolesError && (
-            <Fragment>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField label='Descrição' name='description' formik={formik} />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField label='Quantidade' name='quantity' formik={formik} />
-                </Grid>
+          <Fragment>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField label='Nome' name='value' formik={formik} />
               </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField label='Sobrenome' name='quantity' formik={formik} />
+              </Grid>
+            </Grid>
 
-              <TextField label='Valor' name='valor' formik={formik} />
-
-            </Fragment>
-          )}
+            <TextField label='Email' name='description' formik={formik} />
+          </Fragment>
         </DialogContent>
         <DialogActions>
           <Button onClick={props.onCancel}>Cancelar</Button>
-          <Button color='primary' variant='contained' type='submit' disabled={formik.isSubmitting || !roles}>
+          <Button color='primary' variant='contained' type='submit' disabled={formik.isSubmitting}>
             Salvar
           </Button>
         </DialogActions>

@@ -14,9 +14,9 @@ const ListItem = memo((props: IProps) => {
 
   return (
     <TableRow>
-      <TableCell>{order.description}</TableCell>
       <TableCell>{order.quantity}</TableCell>
       <TableCell>{order.value}</TableCell>
+      <TableCell>{order.description}</TableCell>
     </TableRow>
   );
 });

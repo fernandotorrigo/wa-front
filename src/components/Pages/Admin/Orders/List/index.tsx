@@ -2,6 +2,7 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableHead from '@material-ui/core/TableHead';
@@ -10,11 +11,13 @@ import Toolbar from 'components/Layout/Toolbar';
 import CardLoader from 'components/Shared/CardLoader';
 import EmptyAndErrorMessages from 'components/Shared/Pagination/EmptyAndErrorMessages';
 import SearchField from 'components/Shared/Pagination/SearchField';
+import TableCellActions from 'components/Shared/Pagination/TableCellActions';
 import TableCellSortable from 'components/Shared/Pagination/TableCellSortable';
 import TablePagination from 'components/Shared/Pagination/TablePagination';
 import TableWrapper from 'components/Shared/TableWrapper';
 import usePaginationObservable from 'hooks/usePagination';
 import IOrder from 'interfaces/models/order';
+import RefreshIcon from 'mdi-react/RefreshIcon';
 import React, { Fragment, memo, useCallback, useState } from 'react';
 import orderService from 'services/order';
 
@@ -27,7 +30,7 @@ const OrderListPage = memo(() => {
 
   const [params, mergeParams, loading, data, error, , refresh] = usePaginationObservable(
     params => orderService.list(params),
-    { orderBy: 'fullName', orderDirection: 'asc' },
+    { orderBy: 'description', orderDirection: 'asc' },
     []
   );
 
@@ -50,7 +53,7 @@ const OrderListPage = memo(() => {
   );
 
   const formCancel = useCallback(() => setFormOpened(false), []);
-  // const handleRefresh = useCallback(() => refresh(), [refresh]);
+  const handleRefresh = useCallback(() => refresh(), [refresh]);
 
   const { total, results } = data || ({ total: 0, results: [] } as typeof data);
 
@@ -95,6 +98,11 @@ const OrderListPage = memo(() => {
                 <TableCellSortable paginationParams={params} disabled={loading} onChange={mergeParams} column='description'>
                   Descrição
                 </TableCellSortable>
+                <TableCellActions>
+                  <IconButton disabled={loading} onClick={handleRefresh}>
+                    <RefreshIcon />
+                  </IconButton>
+                </TableCellActions>
               </TableRow>
             </TableHead>
             <TableBody>
