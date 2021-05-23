@@ -84,14 +84,14 @@ const FormDialog = memo((props: IProps) => {
           <Fragment>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <TextField label='Nome' name='value' formik={formik} />
+                <TextField label='Valor' name='value' formik={formik} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField label='Sobrenome' name='quantity' formik={formik} />
+                <TextField label='Quantidade' name='quantity' formik={formik} />
               </Grid>
             </Grid>
 
-            <TextField label='Email' name='description' formik={formik} />
+            <TextField label='Descrição' name='description' formik={formik} />
           </Fragment>
         </DialogContent>
         <DialogActions>
