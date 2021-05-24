@@ -48,11 +48,10 @@ const FormDialog = memo((props: IProps) => {
     initialValues: { value: '', quantity: '', description: '' },
     validationSchema,
     onSubmit(model) {
-      console.log('dasdas');
       return orderService.save(model).pipe(
-        tap(order => {
+        tap(newOrder => {
           Toast.show(`O pedido foi salvo com sucesso`);
-          props.onComplete(order);
+          props.onComplete({...newOrder});
         }),
         logError(true)
       );
@@ -84,10 +83,10 @@ const FormDialog = memo((props: IProps) => {
           <Fragment>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <TextField label='Valor' name='value' formik={formik} />
+                <TextField label='Valor' name='value' mask='money' formik={formik} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField label='Quantidade' name='quantity' formik={formik} />
+                <TextField label='Quantidade' name='quantity' type='number' formik={formik} />
               </Grid>
             </Grid>
 

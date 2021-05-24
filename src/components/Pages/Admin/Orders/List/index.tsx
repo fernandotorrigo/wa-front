@@ -47,7 +47,7 @@ const OrderListPage = memo(() => {
   const formCallback = useCallback(
     (order?: IOrder) => {
       setFormOpened(false);
-      current ? refresh() : mergeParams({ term: order.description });
+      current ? refresh() : mergeParams({ term: '' });
     },
     [current, mergeParams, refresh]
   );

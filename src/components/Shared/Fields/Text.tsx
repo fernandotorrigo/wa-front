@@ -41,6 +41,9 @@ const TextField = memo<IProps>(({ formik, mask, value, name, loading, onChange, 
       name={name}
       value={maskedValue ?? ''}
       onChange={handleChange}
+      inputProps={{
+        minLength: 0
+      }}
       InputProps={{
         endAdornment: !loading ? null : (
           <InputAdornment position='end'>

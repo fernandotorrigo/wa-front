@@ -56,7 +56,6 @@ const FormDialog = memo((props: IProps) => {
     initialValues: { roles: [] },
     validationSchema,
     onSubmit(model) {
-      console.log('dasdas');
       return userService.save(model).pipe(
         tap(user => {
           Toast.show(`${user.firstName} foi salvo${model.id ? '' : ', um email foi enviado com a senha'}`);
