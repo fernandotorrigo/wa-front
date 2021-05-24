@@ -44,13 +44,10 @@ const OrderListPage = memo(() => {
     setFormOpened(true);
   }, []);
 
-  const formCallback = useCallback(
-    (order?: IOrder) => {
-      setFormOpened(false);
-      current ? refresh() : mergeParams({ term: '' });
-    },
-    [current, mergeParams, refresh]
-  );
+  const formCallback = useCallback(() => {
+    setFormOpened(false);
+    current ? refresh() : mergeParams({ term: '' });
+  }, [current, mergeParams, refresh]);
 
   const formCancel = useCallback(() => setFormOpened(false), []);
   const handleRefresh = useCallback(() => refresh(), [refresh]);
@@ -84,18 +81,23 @@ const OrderListPage = memo(() => {
           <Table>
             <TableHead>
               <TableRow>
+                <TableCellSortable paginationParams={params} disabled={loading} onChange={mergeParams} column='value'>
+                  Valor
+                </TableCellSortable>
                 <TableCellSortable
                   paginationParams={params}
                   disabled={loading}
                   onChange={mergeParams}
-                  column='value'
+                  column='quantity'
                 >
-                  Valor
-                </TableCellSortable>
-                <TableCellSortable paginationParams={params} disabled={loading} onChange={mergeParams} column='quantity'>
                   Quantidade
                 </TableCellSortable>
-                <TableCellSortable paginationParams={params} disabled={loading} onChange={mergeParams} column='description'>
+                <TableCellSortable
+                  paginationParams={params}
+                  disabled={loading}
+                  onChange={mergeParams}
+                  column='description'
+                >
                   Descrição
                 </TableCellSortable>
                 <TableCellActions>

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import apiService, { ApiService } from './api';
 
 export class OrderService {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   public list(params: IPaginationParams): Observable<IPaginationResponse<IOrder>> {
     return this.apiService.get('/order', params);
